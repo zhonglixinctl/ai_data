@@ -131,9 +131,9 @@ spring:
         connectionProperties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
       datasource:
         master:
-          url: jdbc:mysql://cxnb-out.mysql.rds.aliyuncs.com:3306/bjmem-v2?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
-          username: bjmem_v2
-          password: bjmem_v2021
+          url: jdbc:mysql://cxnb-out.mysql.rds.aliyuncs.com:3306/zhy_ai_project?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+          username: zhy
+          password: zhy@2021
           driver-class-name: com.mysql.cj.jdbc.Driver
           # 多数据源配置
           #multi-datasource1:
