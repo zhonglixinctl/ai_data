@@ -1,5 +1,5 @@
 server:
-  port: 8089
+  port: 8900
   tomcat:
     max-swallow-size: -1
   error:
@@ -22,8 +22,8 @@ management:
 spring:
   servlet:
      multipart:
-        max-file-size: 10MB
-        max-request-size: 10MB
+        max-file-size: 20MB
+        max-request-size: 20MB
   mail:
     host: smtp.163.com
     username: jeecgos@163.com
@@ -180,7 +180,7 @@ jeecg :
     #webapp文件路径
     webapp: D://opt//webapp
   shiro:
-    excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/category/**,/visual/**,/map/**,/jmreport/bigscreen2/**
+    excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/category/**,/visual/**,/map/**,/jmreport/bigscreen2/**,/zhy/**
   #阿里云oss存储配置
   oss:
     endpoint: oss-cn-beijing.aliyuncs.com

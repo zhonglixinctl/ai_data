@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.zhy_ai.mapper.AIMapper">
+    <select id="check" resultType="org.jeecg.modules.zhy_ai.entity.AiData">
+        select *
+        from (select serial_number, ${field} from ai_data GROUP BY ${field}) tmp
+        where serial_number = #{serialNumber}
+          and ${field} = #{param}
+    </select>
+    <select id="selectFirm" resultType="org.jeecg.modules.zhy_ai.entity.AiFirm">
+        select
+            id,
+            name,
+            no,
+            credit_code,
+            oper_name,
+            status,
+            found
+        from ai_firm
+        where name = #{name}
+    </select>
+    <select id="checkPartNum" resultType="org.jeecg.modules.zhy_ai.entity.AiData">
+        select *
+        from (select serial_number,property5,${field} from ai_data GROUP BY ${field}) tmp
+        where serial_number = #{materialCoding}
+          and property5 = #{property5}
+          and ${field} = #{value}
+    </select>
+    <select id="checkDevice" resultType="org.jeecg.modules.zhy_ai.entity.AiData">
+        select *
+        from (select serial_number,property8,property9 from ai_data GROUP BY property9) tmp
+        where serial_number = #{materialCoding}
+          and property8 = #{property8}
+          and property9 = #{value}
+    </select>
+    <select id="checkDeviceNum" resultType="org.jeecg.modules.zhy_ai.entity.AiData">
+        select *
+        from (select serial_number,property8,property10 from ai_data GROUP BY property10) tmp
+        where serial_number = #{materialCoding}
+          and property8 = #{property8}
+          and property10 = #{value}
+    </select>
+    <select id="selectCoding" resultType="java.lang.String">
+        select serial_number from ai_data  where long_description = #{long} and short_description = #{shor}
+    </select>
+    <select id="like" resultType="org.jeecg.modules.zhy_ai.entity.AiData">
+        select *
+        from (select serial_number, ${field} from ai_data GROUP BY ${field}) tmp
+        where serial_number = #{serialNumber}
+          and ${field} like #{param}
+    </select>
+
+</mapper>
