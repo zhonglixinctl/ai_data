@@ -183,7 +183,7 @@
 <style lang="less">
   body {
     // 打开滚动条固定显示
-    overflow-y: scroll;
+    overflow-y: hidden;;
 
     &.colorWeak {
       filter: invert(80%);
