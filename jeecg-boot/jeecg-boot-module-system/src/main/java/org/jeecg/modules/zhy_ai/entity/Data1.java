@@ -1,19 +1,17 @@
 package org.jeecg.modules.zhy_ai.entity;
 
-import java.util.Date;
-import java.io.Serializable;
-
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.jeecgframework.poi.excel.annotation.Excel;
-import org.springframework.format.annotation.DateTimeFormat;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * (AiData)实体类
@@ -21,12 +19,12 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author 钟腾
  * @since 2021-03-18 14:01:23
  */
-@Data
-@TableName("ai_data")
+@lombok.Data
+@TableName("data")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "ai_data对象", description = "ai_data")
-public class AiData implements Serializable {
+@ApiModel(value = "data对象", description = "data")
+public class Data1 implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * 主键
@@ -37,15 +35,15 @@ public class AiData implements Serializable {
     /**
      * 操作选项
      */
-//    @Excel(name = "操作选项", width = 15)
-//    @ApiModelProperty(value = "操作选项")
-//    private String operationOptions;
-//    /**
-//     * 操作意见
-//     */
-//    @Excel(name = "操作意见", width = 15)
-//    @ApiModelProperty(value = "操作意见")
-//    private String operationalOpinions;
+    @Excel(name = "操作选项", width = 15)
+    @ApiModelProperty(value = "操作选项")
+    private String operationOptions;
+    /**
+     * 操作意见
+     */
+    @Excel(name = "操作意见", width = 15)
+    @ApiModelProperty(value = "操作意见")
+    private String operationalOpinions;
     /**
      * 审核意见
      */
@@ -390,7 +388,7 @@ public class AiData implements Serializable {
 //    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 //    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "创建时间")
-    private Date createTime;
+    private String createTime;
     /**
      * 提报单位
      */
@@ -404,7 +402,7 @@ public class AiData implements Serializable {
 //    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 //    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "提报时间")
-    private Date reportingTime;
+    private String reportingTime;
     /**
      * 流程环节
      */
@@ -416,7 +414,7 @@ public class AiData implements Serializable {
      */
     @Excel(name = "处理时间", width = 15)
     @ApiModelProperty(value = "处理时间")
-    private Date processingTime;
+    private String processingTime;
     /**
      * 校验信息
      */
@@ -459,6 +457,84 @@ public class AiData implements Serializable {
     @Excel(name = "已处理人", width = 15)
     @ApiModelProperty(value = "已处理人")
     private String processedPerson;
+    /**
+     * 文件名称
+     */
+    @Excel(name = "文件名称", width = 15)
+    @ApiModelProperty(value = "文件名称")
+    private String file;
 
-
+    public Data1(String id, String operationOptions, String operationalOpinions, String auditOpinion, String processingStatus, String checkStatus, String attachmentStatus, String categoryCode, String serialNumber, String classificationName, String materialCoding, String longDescription, String shortDescription, String nameOfGoods, String materialType, String basicUnit, String productGroup, String projectCategoryGroup, String transportGroup, String massUnit, String enableBatchManagement, String materialGroup, String dataInitialization, String status, String oldMaterialNumber, String property1, String property2, String property3, String property4, String property5, String property6, String property7, String property8, String property9, String property10, String property11, String property12, String property13, String property14, String property15, String property16, String property17, String property18, String property19, String property20, String dgParameterFile, String minimumShelfLife, String totalShelfLife, String sledPeriodIdentification, String packagingMaterialType, String typeOfData, String storageConditions, String procurementLongText, String dataSources, String mnemonicCode, String disableSign, String synchronizationSystem, String createBy, String createTime, String reportingUnit, String reportingTime, String processLink, String processingTime, String checkInformation, String entityModelVersion, String categoryVersion, String version, String lastModifiedBy, String remarks, String processedPerson, String file) {
+        this.id = id;
+        this.operationOptions = operationOptions;
+        this.operationalOpinions = operationalOpinions;
+        this.auditOpinion = auditOpinion;
+        this.processingStatus = processingStatus;
+        this.checkStatus = checkStatus;
+        this.attachmentStatus = attachmentStatus;
+        this.categoryCode = categoryCode;
+        this.serialNumber = serialNumber;
+        this.classificationName = classificationName;
+        this.materialCoding = materialCoding;
+        this.longDescription = longDescription;
+        this.shortDescription = shortDescription;
+        this.nameOfGoods = nameOfGoods;
+        this.materialType = materialType;
+        this.basicUnit = basicUnit;
+        this.productGroup = productGroup;
+        this.projectCategoryGroup = projectCategoryGroup;
+        this.transportGroup = transportGroup;
+        this.massUnit = massUnit;
+        this.enableBatchManagement = enableBatchManagement;
+        this.materialGroup = materialGroup;
+        this.dataInitialization = dataInitialization;
+        this.status = status;
+        this.oldMaterialNumber = oldMaterialNumber;
+        this.property1 = property1;
+        this.property2 = property2;
+        this.property3 = property3;
+        this.property4 = property4;
+        this.property5 = property5;
+        this.property6 = property6;
+        this.property7 = property7;
+        this.property8 = property8;
+        this.property9 = property9;
+        this.property10 = property10;
+        this.property11 = property11;
+        this.property12 = property12;
+        this.property13 = property13;
+        this.property14 = property14;
+        this.property15 = property15;
+        this.property16 = property16;
+        this.property17 = property17;
+        this.property18 = property18;
+        this.property19 = property19;
+        this.property20 = property20;
+        this.dgParameterFile = dgParameterFile;
+        this.minimumShelfLife = minimumShelfLife;
+        this.totalShelfLife = totalShelfLife;
+        this.sledPeriodIdentification = sledPeriodIdentification;
+        this.packagingMaterialType = packagingMaterialType;
+        this.typeOfData = typeOfData;
+        this.storageConditions = storageConditions;
+        this.procurementLongText = procurementLongText;
+        this.dataSources = dataSources;
+        this.mnemonicCode = mnemonicCode;
+        this.disableSign = disableSign;
+        this.synchronizationSystem = synchronizationSystem;
+        this.createBy = createBy;
+        this.createTime = createTime;
+        this.reportingUnit = reportingUnit;
+        this.reportingTime = reportingTime;
+        this.processLink = processLink;
+        this.processingTime = processingTime;
+        this.checkInformation = checkInformation;
+        this.entityModelVersion = entityModelVersion;
+        this.categoryVersion = categoryVersion;
+        this.version = version;
+        this.lastModifiedBy = lastModifiedBy;
+        this.remarks = remarks;
+        this.processedPerson = processedPerson;
+        this.file = file;
+    }
 }

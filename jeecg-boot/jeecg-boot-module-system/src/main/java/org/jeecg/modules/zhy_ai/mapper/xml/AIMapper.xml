@@ -20,6 +20,7 @@
             found
         from ai_firm
         where name = #{name}
+        GROUP BY name
     </select>
     <select id="checkPartNum" resultType="org.jeecg.modules.zhy_ai.entity.AiData">
         select *
@@ -43,7 +44,7 @@
           and property10 = #{value}
     </select>
     <select id="selectCoding" resultType="java.lang.String">
-        select serial_number from ai_data  where long_description = #{long} and short_description = #{shor}
+        select serial_number from ai_data  where long_description = #{long} and short_description = #{shor} GROUP BY serial_number
     </select>
     <select id="like" resultType="org.jeecg.modules.zhy_ai.entity.AiData">
         select *

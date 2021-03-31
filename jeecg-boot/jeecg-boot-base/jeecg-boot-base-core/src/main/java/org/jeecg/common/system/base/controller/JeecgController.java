@@ -1,8 +1,6 @@
 package org.jeecg.common.system.base.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -54,10 +52,7 @@ public class JeecgController<T, S extends IService<T>> {
         LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
 
         // Step.2 获取导出数据
-        IPage page = new Page();
-        page.setSize(1);
-        page.setCurrent(1);
-        List<T> pageList = service.page(page,queryWrapper).getRecords();
+        List<T> pageList = service.list(queryWrapper);
         List<T> exportList = null;
 
         // 过滤选中数据
@@ -74,7 +69,7 @@ public class JeecgController<T, S extends IService<T>> {
         mv.addObject(NormalExcelConstants.FILE_NAME, title); //此处设置的filename无效 ,前端会重更新设置一下
         mv.addObject(NormalExcelConstants.CLASS, clazz);
         //update-begin--Author:liusq  Date:20210126 for：图片导出报错，ImageBasePath未设置--------------------
-        ExportParams  exportParams=new ExportParams(title + "报表", "导出人:" , title);
+        ExportParams  exportParams=new ExportParams(title + "报表", "导出人:" + sysUser.getRealname(), title);
         exportParams.setImageBasePath(upLoadPath);
         //update-end--Author:liusq  Date:20210126 for：图片导出报错，ImageBasePath未设置----------------------
         mv.addObject(NormalExcelConstants.PARAMS,exportParams);

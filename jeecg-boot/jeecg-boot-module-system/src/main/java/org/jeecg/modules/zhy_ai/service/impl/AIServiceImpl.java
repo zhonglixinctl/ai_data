@@ -2,7 +2,6 @@ package org.jeecg.modules.zhy_ai.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -13,14 +12,17 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jeecg.modules.zhy_ai.entity.AiData;
 import org.jeecg.modules.zhy_ai.entity.AiFirm;
+import org.jeecg.modules.zhy_ai.entity.Data;
+import org.jeecg.modules.zhy_ai.entity.Data1;
 import org.jeecg.modules.zhy_ai.mapper.AIFirmMapper;
 import org.jeecg.modules.zhy_ai.mapper.AIMapper;
-import org.jeecg.modules.zhy_ai.mapper.AiDataMapper;
 import org.jeecg.modules.zhy_ai.service.AIService;
+import org.jeecg.modules.zhy_ai.service.DataService;
 import org.jeecg.modules.zhy_ai.util.AIUtil;
 import org.jeecg.modules.zhy_ai.util.MainApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -28,8 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -40,6 +40,8 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
     private AIMapper aiMapper;
     @Autowired
     private AIFirmMapper aiFirmMapper;
+    @Autowired
+    private DataService dataService;
 
     /**
      * 检查数据
@@ -51,6 +53,10 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
     @Override
     public Map<String, Object> checkData(HttpServletRequest request, HttpServletResponse response) {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        List<MultipartFile> file1 = multipartRequest.getMultiFileMap().get("file");
+        MultipartFile multipartFile = file1.get(0);
+        String name = multipartFile.getOriginalFilename();
+        System.out.println("导入的文件名为----->>" + name);
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         //构建返回的对象
         List<String> msgList = new ArrayList<>();
@@ -59,6 +65,7 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
             // 获取上传文件对象
             MultipartFile file = entity.getValue();
+
             try {
                 InputStream inputStream = file.getInputStream();
                 // 解析不同后缀名的表格 使用不同的对象, Workbook是父类
@@ -78,8 +85,11 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
 //                    HSSFRow row = sheet.getRow(i);
                     Row row = sheet.getRow(i);
                     List<String> rowList = new ArrayList<>();
-                    for (int j = 0; j < 60; j++) {
-                        rowList.add(String.valueOf(row.getCell(j)));
+                    for (int j = 0; j < 70; j++) {
+                        if (row == null) {
+                            break;
+                        }
+                        rowList.add("null".equals(String.valueOf(row.getCell(j)))?"":String.valueOf(row.getCell(j)));
                     }
                     list.add(rowList);
 //                    //取出每个字段
@@ -98,6 +108,9 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
                         // 处理表头信息 返回以标为key,名称为value
                         maps = parseHeaders(list1);
                     } else {
+                        if (list1.size() == 0) {
+                            break;
+                        }
                         String serialNumber = list1.get(map.get("类别编码"));
                         switch (serialNumber) {
                             case "A280101":
@@ -142,7 +155,7 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
                                                     if (AIUtil.hasNum(value)) {
                                                         msg.append("物资名称'").append(value).append("'错误,请按照规范标准名称，采用中英文简写,不能使用数字。");
                                                     }
-                                                    if("TIME DELAY VALVES".equals(value)){
+                                                    if ("TIME DELAY VALVES".equals(value)) {
                                                         msg.append("属性值错误，物资名称应规范为TIME DELAY VALVE。");
                                                     }
                                                     break;
@@ -224,7 +237,7 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
                                                     } else if (found.equals(firm.getFound())) {
                                                         msg.append("属性值错误，请确认厂家名称或提供厂家资料。");
                                                     }
-                                                    if("TIMRC".equals(value)){
+                                                    if ("TIMRC".equals(value)) {
                                                         msg.append("属性值错误，请确认厂家名称或提供厂家资料。");
                                                     }
                                                     break;
@@ -274,7 +287,7 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
                                     }
                                 }
                                 break;
-                            case "":
+                            case "null":
                                 break;
                             default:
                                 System.out.println("物料编码暂时未提供!!");
@@ -298,6 +311,7 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
         Map<String, Object> map = new HashMap<>();
         map.put("msgList", msgList);
         map.put("data", data);
+        addData(data, name);
         return map;
     }
 
@@ -357,5 +371,30 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
      */
     private void updateFirm(AiFirm firm) {
         aiFirmMapper.updateById(firm);
+    }
+
+    /**
+     * 将数据添加到data表,进行导出
+     *
+     * @param list
+     */
+    @Transactional
+    public void addData(List<List<String>> list, String fileName) {
+//        List dataList = new LinkedList();
+        for (int i = 0; i < list.size(); i++) {
+            if (i != 0) {
+                List<String> list1 = list.get(i);
+                Data data = new Data(null, list1.get(0), list1.get(1), list1.get(2), list1.get(3), list1.get(4), list1.get(5), list1.get(6), list1.get(7),
+                        list1.get(8), list1.get(9), list1.get(10), list1.get(11), list1.get(12), list1.get(13), list1.get(14), list1.get(15), list1.get(16), list1.get(17),
+                        list1.get(18), list1.get(19), list1.get(20), list1.get(21), list1.get(22), list1.get(23), list1.get(24), list1.get(25), list1.get(26), "", "", "", "", "", "", list1.get(27),
+                        list1.get(28), list1.get(29), list1.get(30), list1.get(31), list1.get(32), list1.get(33), list1.get(34), list1.get(35), list1.get(36), list1.get(37),
+                        list1.get(38), list1.get(39), list1.get(40), list1.get(41), list1.get(42), list1.get(43), list1.get(44), list1.get(45), list1.get(46), list1.get(47),
+                        list1.get(48), list1.get(49), list1.get(50), list1.get(51), list1.get(52), list1.get(53), list1.get(54), list1.get(55), list1.get(56), list1.get(57),
+                        list1.get(58), list1.get(59), list1.get(60), list1.get(61), list1.get(62), fileName);
+//                dataList.add(data);
+                dataService.save(data);
+            }
+//            dataService.saveBatch(dataList);
+        }
     }
 }

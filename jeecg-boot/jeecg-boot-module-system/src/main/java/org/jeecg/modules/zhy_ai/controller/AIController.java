@@ -23,16 +23,16 @@ public class AIController extends JeecgController<AiData, AIService> {
     @Autowired
     private AIService aiService;
 
-    /**
-     * 导出excel
-     *
-     * @param request
-     * @param aiData
-     */
-    @RequestMapping(value = "/exportXls")
-    public ModelAndView exportXls(HttpServletRequest request, AiData aiData) {
-        return super.exportXls(request, aiData, AiData.class, "ai");
-    }
+//    /**
+//     * 导出excel
+//     *
+//     * @param request
+//     * @param aiData
+//     */
+//    @RequestMapping(value = "/exportXls")
+//    public ModelAndView exportXls(HttpServletRequest request, AiData aiData) {
+//        return super.exportXls(request, aiData, AiData.class, "ai");
+//    }
 
     /**
      * 通过excel导入数据,在进行处理
