@@ -5,6 +5,13 @@ import { UserLayout, TabLayout, RouteView, BlankLayout, PageView } from '@/compo
  * @type {[null,null]}
  */
 export const asyncRouterMap = [
+  {
+    path: '/ai',
+    name: 'dashboard',
+    component: TabLayout,
+    meta: { title: 'AI数据处理' },
+    redirect: '/ai/index',
+  },
 
   {
     path: '/',
