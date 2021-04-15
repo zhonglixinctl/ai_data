@@ -6,7 +6,7 @@
         name="file"
         :limit="0"
         :multiple="true"
-        action="http://192.168.3.23:8900/jeecg-boot/zhy/importExcel"
+        action="http://127.0.0.1:8900/jeecg-boot/zhy/importExcel"
         @change="handleChange"
       >
         <a-button type="primary" icon="cloud">数据分析</a-button>
@@ -43,6 +43,7 @@ export default {
 
       tble: [],
       thd: [],
+      filename: '',
       url: {
         syncUser: '/act/process/extActProcess/doSyncUser',
         list: '/sys/user/list',
@@ -59,7 +60,7 @@ export default {
   methods: {
     request(a) {
       console.log(a)
-      postAction('http://10.0.0.10:8900/jeecg-boot/zhy/importExcel', a.data).then(res => {
+      postAction('http://127.0.0.1:8900/jeecg-boot/zhy/importExcel', a.data).then(res => {
         if (res.code == 200) {
 
         } else {
@@ -92,7 +93,7 @@ export default {
     },
     daochu() {
       axios({
-        url: '/zhy/exportXls',
+        url: '/zhy/exportXls?fileName=' + this.filename,
         // params: parameter,
         method: 'get',
         responseType: 'blob'
@@ -102,7 +103,7 @@ export default {
           return
         }
 
-        let filename = 'filename.xls'// 判断是否使用默认文件名
+        let filename = this.filename// 判断是否使用默认文件名
         if (typeof window.navigator.msSaveBlob !== 'undefined') {
           window.navigator.msSaveBlob(blob, filename)
         } else {
@@ -110,7 +111,7 @@ export default {
           var tempLink = document.createElement('a')// 创建一个a标签
           tempLink.style.display = 'none'
           tempLink.href = blobURL
-          tempLink.setAttribute('download', filename)// 给a标签添加下载属性
+          tempLink.setAttribute('download', "分析后"+filename)// 给a标签添加下载属性
 
           document.body.appendChild(tempLink)// 将a标签添加到body当中
           tempLink.click()// 启动下载
@@ -122,6 +123,7 @@ export default {
 
     handleChange(info) {
       const status = info.file.status
+      this.filename = info.file.name
       if (status !== 'uploading') {
         console.log(info.file)
       }
@@ -154,6 +156,7 @@ export default {
   background-size: 100%;
   display: inline-block;
 }
+
 /* .box::before{
   content:'';
   filter:blur(5px;)

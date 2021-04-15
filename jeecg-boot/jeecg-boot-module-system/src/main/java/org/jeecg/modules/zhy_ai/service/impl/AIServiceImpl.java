@@ -89,7 +89,7 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
                         if (row == null) {
                             break;
                         }
-                        rowList.add("null".equals(String.valueOf(row.getCell(j)))?"":String.valueOf(row.getCell(j)));
+                        rowList.add("null".equals(String.valueOf(row.getCell(j))) ? "" : String.valueOf(row.getCell(j)));
                     }
                     list.add(rowList);
 //                    //取出每个字段
@@ -157,6 +157,9 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
                                                     }
                                                     if ("TIME DELAY VALVES".equals(value)) {
                                                         msg.append("属性值错误，物资名称应规范为TIME DELAY VALVE。");
+                                                    }
+                                                    if ("主板".equals(value) || "显示器".equals(value)) {
+                                                        msg.append("属性值错误,根据制造厂商协同规范要求，物资名称应填写英文名称。");
                                                     }
                                                     break;
                                                 case "物料组":
@@ -290,6 +293,7 @@ public class AIServiceImpl extends ServiceImpl<AIMapper, AiData> implements AISe
                             case "null":
                                 break;
                             default:
+                                msg.append("物料编码暂时未提供!!");
                                 System.out.println("物料编码暂时未提供!!");
                                 break;
                         }
